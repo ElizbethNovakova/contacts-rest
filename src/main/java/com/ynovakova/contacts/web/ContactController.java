@@ -2,6 +2,12 @@ package com.ynovakova.contacts.web;
 
 import com.ynovakova.contacts.pojo.Contact;
 import com.ynovakova.contacts.service.ContactService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +18,16 @@ import java.util.List;
 
 @RestController
 @ResponseBody
+@Tag(name = "Contact Controller", description = "Create and retrieve contacts")
 public class ContactController {
 
     @Autowired
     private ContactService contactService;
 
+    @Operation(summary = "Retrieves contacts", description = "Provides a list of all contacts")
+    @ApiResponse(responseCode = "200",
+            description = "Successful retrieval of contacts",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Contact.class))))
     @GetMapping("contact/all")
     public ResponseEntity<List<Contact>> getContacts(){
         List<Contact> contacts = contactService.getContacts();
